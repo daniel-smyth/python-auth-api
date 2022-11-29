@@ -8,7 +8,7 @@ import utils.mongo as mongodb
 
 from routes import auth, user
 
-app = FastAPI(title="Tiger Spider API", docs_url="/api/docs")
+app = FastAPI(title="Daniel Smyth API", docs_url="/api/docs")
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -16,7 +16,7 @@ settings = config.get_settings()
 
 ENV = settings.environment  # Environment: dev/production
 
-FRONT_END_URL = settings.APP_DEV if ENV == "dev" else settings.APP
+FRONT_END_URL = settings.APP_URL_DEV if ENV == "dev" else settings.APP_URL
 
 # CORS
 app.add_middleware(
@@ -35,7 +35,7 @@ app.include_router(user.r)
 @app.on_event("startup")
 async def start_database():
     """Initialize MongoDB connection and Beanie ORM"""
-    db_name = settings.DB_DEV if ENV == "dev" else settings.DB
+    db_name = settings.DB_NAME_DEV if ENV == "dev" else settings.DB_NAME
 
     await mongodb.manager.connect(settings.DB_URL, db_name)
     await mongodb.manager.init_beanie(db_name)

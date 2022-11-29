@@ -15,7 +15,7 @@ r = APIRouter(
 )
 
 
-@r.get("/me", response_model=models.UserOut)
+@r.get("", response_model=models.UserOut)
 async def user_me(current_user=Depends(auth.get_active_user)):
     """
     Get current user from JWT
@@ -23,8 +23,8 @@ async def user_me(current_user=Depends(auth.get_active_user)):
     return current_user
 
 
-@r.get("/get/{id}", response_model=models.UserOut)
-async def get_user(
+@r.get("/{id}", response_model=models.UserOut)
+async def user_get(
     id: PydanticObjectId, admin=Depends(auth.get_current_active_admin)
 ):
     """
@@ -37,7 +37,7 @@ async def get_user(
 
 
 @r.post("", response_model=models.UserOut)
-async def create_user(
+async def user_create(
     create: models.UserCreate = Body(),
     admin=Depends(auth.get_current_active_admin),
 ):
@@ -53,7 +53,7 @@ async def create_user(
 
 
 @r.put("/{id}", response_model=models.UserOut)
-async def edit_user(id: PydanticObjectId, edit: models.UserEdit):
+async def user_edit(id: PydanticObjectId, edit: models.UserEdit):
     """
     Edit a user in the database
 
@@ -68,7 +68,7 @@ async def edit_user(id: PydanticObjectId, edit: models.UserEdit):
 
 
 @r.delete("/{id}", response_model=bool)
-async def delete_user(id: PydanticObjectId):
+async def user_delete(id: PydanticObjectId):
     """
     Delete a user in the database
 
@@ -80,9 +80,11 @@ async def delete_user(id: PydanticObjectId):
     return user
 
 
-@r.get("", response_model=List[models.UserOut])
-async def get_all_users(
-    response: Response, superuser=Depends(auth.get_current_active_superuser)
+@r.get("/get-all/", response_model=List[models.UserOut])
+async def user_list(
+    response: Response,
+    limit=100,
+    superuser=Depends(auth.get_current_active_superuser),
 ):
     """
     Get all users
@@ -90,7 +92,7 @@ async def get_all_users(
     Args:
        - `limit`: List size limit
     """
-    users = await db.get_users()
+    users = await db.get_users(limit)
 
     # This is necessary for react-admin to work
     response.headers["Content-Range"] = f"0-9/{len(users)}"

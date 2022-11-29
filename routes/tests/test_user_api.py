@@ -15,7 +15,7 @@ async def test_get_user(
     client: AsyncClient, test_user: User, superuser_token_headers
 ):
     response = await client.get(
-        f"/users/get/{test_user.id}", headers=superuser_token_headers
+        f"/users/{test_user.id}", headers=superuser_token_headers
     )
 
     assert response.status_code == 200
@@ -35,7 +35,7 @@ async def test_user_not_found(client: AsyncClient, superuser_token_headers):
     id = PydanticObjectId()
 
     response = await client.get(
-        f"/users/find/{id}", headers=superuser_token_headers
+        f"/users/{id}", headers=superuser_token_headers
     )
 
     assert response.status_code == 404
@@ -156,7 +156,9 @@ async def test_users_lists(
     test_superuser: User,
     superuser_token_headers,
 ):
-    response = await client.get("/users", headers=superuser_token_headers)
+    response = await client.get(
+        "/users/get-all/", headers=superuser_token_headers
+    )
 
     assert response.status_code == 200
 
@@ -187,7 +189,7 @@ async def test_users_lists(
 async def test_authenticated_user_me(
     client: AsyncClient, test_user: User, user_token_headers
 ):
-    response = await client.get("/users/me", headers=user_token_headers)
+    response = await client.get("/users", headers=user_token_headers)
 
     assert response.status_code == 200
 
@@ -204,10 +206,10 @@ async def test_authenticated_user_me(
 
 
 async def test_unauthenticated_routes(client: AsyncClient):
-    response = await client.get("/users/me")
+    response = await client.get("/users")
     assert response.status_code == 401
 
-    response = await client.get("/users/get/123")
+    response = await client.get("/users/123")
     assert response.status_code == 401
 
     response = await client.put("/users/123")
@@ -218,8 +220,8 @@ async def test_unauthenticated_routes(client: AsyncClient):
 
 
 async def test_unauthorized_routes(client: AsyncClient, user_token_headers):
-    response = await client.get("/users", headers=user_token_headers)
+    response = await client.get("/users/get-all", headers=user_token_headers)
     assert response.status_code == 403
 
-    response = await client.get("/users/get/123", headers=user_token_headers)
+    response = await client.get("/users/123", headers=user_token_headers)
     assert response.status_code == 403
