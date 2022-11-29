@@ -11,7 +11,15 @@
 | MongoDB  | https://www.mongodb.com/          |
 | Pytest   | https://docs.pytest.org/en/7.2.x/ |
 
-FastAPI template with authentication implemented in MongoDB. Pytest included for all routes. Utility folder with modules for AWS file management, local file managment, lists and MongoDB.
+# OpenAPI Documentation
+
+![image](https://i.imgur.com/KbQHsMZ.png)
+
+# Description
+
+FastAPI template with authentication implemented in MongoDB.
+Pytest included for all routes.
+Utility folder with modules for AWS file management, local file managment, lists and MongoDB.
 
 ### Installation
 
