@@ -1,5 +1,5 @@
 aiobotocore==2.4.0
-bcrypt==4.0.0
+bcrypt==4.1.2
 beanie==1.11.12
 black==22.8.0
 fastapi==0.85.0
