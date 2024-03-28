@@ -5,7 +5,7 @@ black==22.8.0
 fastapi==0.85.0
 flake8==5.0.4
 httpx==0.23.0
-motor==3.0.0
+motor==3.4.0
 passlib==1.7.4
 pydantic[dotenv]
 pydantic[email]
